@@ -17,49 +17,49 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BookEditionService {
 
-    private final BookEditionRepository bookEditionRepository;
+  private final BookEditionRepository bookEditionRepository;
 
-    public BookEdition create(BookEdition bookEdition) {
-        JBookEdition saved = bookEditionRepository.save(toEntity(bookEdition));
-        return toDomain(saved);
+  public BookEdition create(BookEdition bookEdition) {
+    JBookEdition saved = bookEditionRepository.save(toEntity(bookEdition));
+    return toDomain(saved);
+  }
+
+  public BookEdition getById(UUID id) {
+    return bookEditionRepository
+        .findById(id)
+        .map(this::toDomain)
+        .orElseThrow(() -> new EntityNotFoundException("BookEdition not found: " + id));
+  }
+
+  public List<BookEdition> getAll() {
+    return bookEditionRepository.findAll().stream()
+        .map(this::toDomain)
+        .collect(Collectors.toList());
+  }
+
+  public BookEdition update(UUID id, BookEdition bookEdition) {
+    JBookEdition existing =
+        bookEditionRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("BookEdition not found: " + id));
+
+    existing.setType(bookEdition.getType());
+
+    return toDomain(bookEditionRepository.save(existing));
+  }
+
+  public void delete(UUID id) {
+    if (!bookEditionRepository.existsById(id)) {
+      throw new EntityNotFoundException("BookEdition not found: " + id);
     }
+    bookEditionRepository.deleteById(id);
+  }
 
-    public BookEdition getById(UUID id) {
-        return bookEditionRepository
-                .findById(id)
-                .map(this::toDomain)
-                .orElseThrow(() -> new EntityNotFoundException("BookEdition not found: " + id));
-    }
+  private JBookEdition toEntity(BookEdition bookEdition) {
+    return new JBookEdition(bookEdition.getId(), bookEdition.getType());
+  }
 
-    public List<BookEdition> getAll() {
-        return bookEditionRepository.findAll().stream()
-                .map(this::toDomain)
-                .collect(Collectors.toList());
-    }
-
-    public BookEdition update(UUID id, BookEdition bookEdition) {
-        JBookEdition existing =
-                bookEditionRepository
-                        .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("BookEdition not found: " + id));
-
-        existing.setType(bookEdition.getType());
-
-        return toDomain(bookEditionRepository.save(existing));
-    }
-
-    public void delete(UUID id) {
-        if (!bookEditionRepository.existsById(id)) {
-            throw new EntityNotFoundException("BookEdition not found: " + id);
-        }
-        bookEditionRepository.deleteById(id);
-    }
-
-    private JBookEdition toEntity(BookEdition bookEdition) {
-        return new JBookEdition(bookEdition.getId(), bookEdition.getType());
-    }
-
-    private BookEdition toDomain(JBookEdition entity) {
-        return new BookEdition(entity.getId(), entity.getType());
-    }
+  private BookEdition toDomain(JBookEdition entity) {
+    return new BookEdition(entity.getId(), entity.getType());
+  }
 }

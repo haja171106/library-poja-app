@@ -17,47 +17,47 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ArrivalService {
 
-    private final ArrivalRepository arrivalRepository;
+  private final ArrivalRepository arrivalRepository;
 
-    public Arrival create(Arrival arrival) {
-        JArrival saved = arrivalRepository.save(toEntity(arrival));
-        return toDomain(saved);
+  public Arrival create(Arrival arrival) {
+    JArrival saved = arrivalRepository.save(toEntity(arrival));
+    return toDomain(saved);
+  }
+
+  public Arrival getById(UUID id) {
+    return arrivalRepository
+        .findById(id)
+        .map(this::toDomain)
+        .orElseThrow(() -> new EntityNotFoundException("Arrival not found: " + id));
+  }
+
+  public List<Arrival> getAll() {
+    return arrivalRepository.findAll().stream().map(this::toDomain).collect(Collectors.toList());
+  }
+
+  public Arrival update(UUID id, Arrival arrival) {
+    JArrival existing =
+        arrivalRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Arrival not found: " + id));
+
+    existing.setNbr_book(arrival.getNbr_book());
+
+    return toDomain(arrivalRepository.save(existing));
+  }
+
+  public void delete(UUID id) {
+    if (!arrivalRepository.existsById(id)) {
+      throw new EntityNotFoundException("Arrival not found: " + id);
     }
+    arrivalRepository.deleteById(id);
+  }
 
-    public Arrival getById(UUID id) {
-        return arrivalRepository
-                .findById(id)
-                .map(this::toDomain)
-                .orElseThrow(() -> new EntityNotFoundException("Arrival not found: " + id));
-    }
+  private JArrival toEntity(Arrival arrival) {
+    return new JArrival(arrival.getId(), arrival.getNbr_book());
+  }
 
-    public List<Arrival> getAll() {
-        return arrivalRepository.findAll().stream().map(this::toDomain).collect(Collectors.toList());
-    }
-
-    public Arrival update(UUID id, Arrival arrival) {
-        JArrival existing =
-                arrivalRepository
-                        .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("Arrival not found: " + id));
-
-        existing.setNbr_book(arrival.getNbr_book());
-
-        return toDomain(arrivalRepository.save(existing));
-    }
-
-    public void delete(UUID id) {
-        if (!arrivalRepository.existsById(id)) {
-            throw new EntityNotFoundException("Arrival not found: " + id);
-        }
-        arrivalRepository.deleteById(id);
-    }
-
-    private JArrival toEntity(Arrival arrival) {
-        return new JArrival(arrival.getId(), arrival.getNbr_book());
-    }
-
-    private Arrival toDomain(JArrival entity) {
-        return new Arrival(entity.getId(), entity.getNbr_book());
-    }
+  private Arrival toDomain(JArrival entity) {
+    return new Arrival(entity.getId(), entity.getNbr_book());
+  }
 }

@@ -17,67 +17,65 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CustomerService {
 
-    private final CustomerRepository customerRepository;
+  private final CustomerRepository customerRepository;
 
-    public Customer create(Customer customer) {
-        JCustomer saved = customerRepository.save(toEntity(customer));
-        return toDomain(saved);
+  public Customer create(Customer customer) {
+    JCustomer saved = customerRepository.save(toEntity(customer));
+    return toDomain(saved);
+  }
+
+  public Customer getById(UUID id) {
+    return customerRepository
+        .findById(id)
+        .map(this::toDomain)
+        .orElseThrow(() -> new EntityNotFoundException("Customer not found: " + id));
+  }
+
+  public List<Customer> getAll() {
+    return customerRepository.findAll().stream().map(this::toDomain).collect(Collectors.toList());
+  }
+
+  public Customer update(UUID id, Customer customer) {
+    JCustomer existing =
+        customerRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Customer not found: " + id));
+
+    existing.setFirstname(customer.getFirstname());
+    existing.setLastname(customer.getLastname());
+    existing.setEmail(customer.getEmail());
+    existing.setBirthday(customer.getBirthday());
+    existing.setAdress(customer.getAdress());
+
+    return toDomain(customerRepository.save(existing));
+  }
+
+  public void delete(UUID id) {
+    if (!customerRepository.existsById(id)) {
+      throw new EntityNotFoundException("Customer not found: " + id);
     }
+    customerRepository.deleteById(id);
+  }
 
-    public Customer getById(UUID id) {
-        return customerRepository
-                .findById(id)
-                .map(this::toDomain)
-                .orElseThrow(() -> new EntityNotFoundException("Customer not found: " + id));
-    }
+  private JCustomer toEntity(Customer customer) {
+    JCustomer entity = new JCustomer();
+    entity.setId(customer.getId());
+    entity.setFirstname(customer.getFirstname());
+    entity.setLastname(customer.getLastname());
+    entity.setEmail(customer.getEmail());
+    entity.setBirthday(customer.getBirthday());
+    entity.setAdress(customer.getAdress());
+    return entity;
+  }
 
-    public List<Customer> getAll() {
-        return customerRepository.findAll().stream()
-                .map(this::toDomain)
-                .collect(Collectors.toList());
-    }
-
-    public Customer update(UUID id, Customer customer) {
-        JCustomer existing =
-                customerRepository
-                        .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("Customer not found: " + id));
-
-        existing.setFirstname(customer.getFirstname());
-        existing.setLastname(customer.getLastname());
-        existing.setEmail(customer.getEmail());
-        existing.setBirthday(customer.getBirthday());
-        existing.setAdress(customer.getAdress());
-
-        return toDomain(customerRepository.save(existing));
-    }
-
-    public void delete(UUID id) {
-        if (!customerRepository.existsById(id)) {
-            throw new EntityNotFoundException("Customer not found: " + id);
-        }
-        customerRepository.deleteById(id);
-    }
-
-    private JCustomer toEntity(Customer customer) {
-        JCustomer entity = new JCustomer();
-        entity.setId(customer.getId());
-        entity.setFirstname(customer.getFirstname());
-        entity.setLastname(customer.getLastname());
-        entity.setEmail(customer.getEmail());
-        entity.setBirthday(customer.getBirthday());
-        entity.setAdress(customer.getAdress());
-        return entity;
-    }
-
-    private Customer toDomain(JCustomer entity) {
-        Customer customer = new Customer();
-        customer.setId(entity.getId());
-        customer.setFirstname(entity.getFirstname());
-        customer.setLastname(entity.getLastname());
-        customer.setEmail(entity.getEmail());
-        customer.setBirthday(entity.getBirthday());
-        customer.setAdress(entity.getAdress());
-        return customer;
-    }
+  private Customer toDomain(JCustomer entity) {
+    Customer customer = new Customer();
+    customer.setId(entity.getId());
+    customer.setFirstname(entity.getFirstname());
+    customer.setLastname(entity.getLastname());
+    customer.setEmail(entity.getEmail());
+    customer.setBirthday(entity.getBirthday());
+    customer.setAdress(entity.getAdress());
+    return customer;
+  }
 }
