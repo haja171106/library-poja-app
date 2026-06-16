@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JBookRepository extends JpaRepository<JBook, UUID> {
+public interface BookRepository extends JpaRepository<JBook, UUID> {
 
   @Override
   List<JBook> findAll();

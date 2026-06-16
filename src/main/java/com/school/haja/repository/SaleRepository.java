@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JSaleRepository extends JpaRepository<JSale, UUID> {
+public interface SaleRepository extends JpaRepository<JSale, UUID> {
 
   @Override
   List<JSale> findAll();

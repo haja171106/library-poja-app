@@ -1,6 +1,6 @@
 package com.school.haja.repository;
 
-import com.school.haja.repository.model.JBookEdition;
+import com.school.haja.repository.model.JLibrary;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,10 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JBookEditionRepository extends JpaRepository<JBookEdition, UUID> {
+public interface LibraryRepository extends JpaRepository<JLibrary, UUID> {
 
   @Override
-  List<JBookEdition> findAll();
+  List<JLibrary> findAll();
 
-  Optional<JBookEdition> findByType(String type);
+  Optional<JLibrary> findByName(String name);
+
+  boolean existsByName(String name);
 }

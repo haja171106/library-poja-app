@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JPaymentRepository extends JpaRepository<JPayment, UUID> {
+public interface PaymentRepository extends JpaRepository<JPayment, UUID> {
 
   @Override
   List<JPayment> findAll();

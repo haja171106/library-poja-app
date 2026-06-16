@@ -1,6 +1,6 @@
 package com.school.haja.repository;
 
-import com.school.haja.repository.model.JLibrary;
+import com.school.haja.repository.model.JCustomer;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,12 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JLibraryRepository extends JpaRepository<JLibrary, UUID> {
+public interface CustomerRepository extends JpaRepository<JCustomer, UUID> {
 
   @Override
-  List<JLibrary> findAll();
+  List<JCustomer> findAll();
 
-  Optional<JLibrary> findByName(String name);
+  Optional<JCustomer> findByEmail(String email);
 
-  boolean existsByName(String name);
+  boolean existsByEmail(String email);
 }
