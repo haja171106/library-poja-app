@@ -8,3 +8,4 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Customer extends User {}
+
