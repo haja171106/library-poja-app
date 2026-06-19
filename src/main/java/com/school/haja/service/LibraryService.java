@@ -54,10 +54,7 @@ public class LibraryService {
   }
 
   private JLibrary toEntity(Library library) {
-    JLibrary entity = new JLibrary();
-    entity.setId(library.getId());
-    entity.setName(library.getName());
-    return entity;
+    return new JLibrary(library.getId(), library.getName());
   }
 
   private Library toDomain(JLibrary entity) {

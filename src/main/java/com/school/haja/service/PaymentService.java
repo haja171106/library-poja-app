@@ -55,11 +55,7 @@ public class PaymentService {
   }
 
   private JPayment toEntity(Payment payment) {
-    JPayment entity = new JPayment();
-    entity.setId(payment.getId());
-    entity.setType(payment.getType());
-    entity.setPrice(payment.getPrice());
-    return entity;
+    return new JPayment(payment.getId(), payment.getType(), payment.getPrice());
   }
 
   private Payment toDomain(JPayment entity) {

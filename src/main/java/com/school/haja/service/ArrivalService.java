@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/** Couche service pour l'entité {@link Arrival}. */
 @Service
 @AllArgsConstructor
 @Transactional
@@ -53,10 +54,7 @@ public class ArrivalService {
   }
 
   private JArrival toEntity(Arrival arrival) {
-    JArrival entity = new JArrival();
-    entity.setId(arrival.getId());
-    entity.setNbr_book(arrival.getNbr_book());
-    return entity;
+    return new JArrival(arrival.getId(), arrival.getNbr_book());
   }
 
   private Arrival toDomain(JArrival entity) {

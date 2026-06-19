@@ -56,10 +56,7 @@ public class BookEditionService {
   }
 
   private JBookEdition toEntity(BookEdition bookEdition) {
-    JBookEdition entity = new JBookEdition();
-    entity.setId(bookEdition.getId());
-    entity.setType(bookEdition.getType());
-    return entity;
+    return new JBookEdition(bookEdition.getId(), bookEdition.getType());
   }
 
   private BookEdition toDomain(JBookEdition entity) {

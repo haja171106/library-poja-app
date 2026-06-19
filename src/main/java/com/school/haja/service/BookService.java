@@ -61,14 +61,13 @@ public class BookService {
   }
 
   private JBook toEntity(Book book) {
-    JBook entity = new JBook();
-    entity.setId(book.getId());
-    entity.setTitle(book.getTitle());
-    entity.setIsbn(book.getIsbn());
-    entity.setNbr_page(book.getNbr_page());
-    entity.setPrice(book.getPrice());
-    entity.setRelease_date(book.getRelease_date());
-    return entity;
+    return new JBook(
+        book.getId(),
+        book.getTitle(),
+        book.getIsbn(),
+        book.getNbr_page(),
+        book.getPrice(),
+        book.getRelease_date());
   }
 
   private Book toDomain(JBook entity) {

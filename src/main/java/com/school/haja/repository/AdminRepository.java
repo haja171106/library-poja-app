@@ -1,14 +1,17 @@
 package com.school.haja.repository;
 
-import com.school.haja.repository.model.JArrival;
+import com.school.haja.repository.model.JAdmin;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ArrivalRepository extends JpaRepository<JArrival, UUID> {
+public interface AdminRepository extends JpaRepository<JAdmin, UUID> {
 
   @Override
-  List<JArrival> findAll();
+  List<JAdmin> findAll();
+
+  Optional<JAdmin> findByEmail(String email);
 }
