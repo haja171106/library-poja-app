@@ -5,10 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +23,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class JBook {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -39,4 +43,21 @@ public class JBook {
 
   @Column(name = "release_date")
   private Instant release_date;
+
+  @OneToMany(mappedBy = "book")
+  private Set<JBookEdition> editions = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+      name = "book_genres",
+      joinColumns = @JoinColumn(name = "book_id"),
+      inverseJoinColumns = @JoinColumn(name = "genre_id"))
+  private Set<JGenre> genres = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+      name = "book_authors",
+      joinColumns = @JoinColumn(name = "book_id"),
+      inverseJoinColumns = @JoinColumn(name = "author_id"))
+  private Set<JAuthor> authors = new HashSet<>();
 }
