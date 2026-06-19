@@ -62,6 +62,7 @@ public class SaleService {
     entity.setNbr_sale(sale.getNbr_sale());
     entity.setStatus(sale.getStatus());
     return entity;
+    return new JSale(sale.getId(), sale.getPrice(), sale.getNbr_sale(), sale.getStatus());
   }
 
   private Sale toDomain(JSale entity) {
