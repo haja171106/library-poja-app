@@ -5,9 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +22,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class JLibrary {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,4 +30,17 @@ public class JLibrary {
 
   @Column(name = "name")
   private String name;
+
+  @OneToMany(mappedBy = "library")
+  private Set<JSale> sales = new HashSet<>();
+
+  @OneToMany(mappedBy = "library")
+  private Set<JArrival> arrivals = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+      name = "library_books",
+      joinColumns = @JoinColumn(name = "library_id"),
+      inverseJoinColumns = @JoinColumn(name = "book_id"))
+  private Set<JBook> books = new HashSet<>();
 }

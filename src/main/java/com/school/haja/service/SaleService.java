@@ -56,6 +56,12 @@ public class SaleService {
   }
 
   private JSale toEntity(Sale sale) {
+    JSale entity = new JSale();
+    entity.setId(sale.getId());
+    entity.setPrice(sale.getPrice());
+    entity.setNbr_sale(sale.getNbr_sale());
+    entity.setStatus(sale.getStatus());
+    return entity;
     return new JSale(sale.getId(), sale.getPrice(), sale.getNbr_sale(), sale.getStatus());
   }
 

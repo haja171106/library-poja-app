@@ -8,9 +8,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class JSale {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,4 +36,8 @@ public class JSale {
   @Enumerated(EnumType.STRING)
   @Column(name = "status")
   private SaleStatus status;
+
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "library_id", nullable = false)
+  private JLibrary library;
 }
