@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Couche service pour l'entité {@link BookEdition}. */
 @Service
 @AllArgsConstructor
 @Transactional
@@ -56,7 +55,10 @@ public class BookEditionService {
   }
 
   private JBookEdition toEntity(BookEdition bookEdition) {
-    return new JBookEdition(bookEdition.getId(), bookEdition.getType());
+    JBookEdition entity = new JBookEdition();
+    entity.setId(bookEdition.getId());
+    entity.setType(bookEdition.getType());
+    return entity;
   }
 
   private BookEdition toDomain(JBookEdition entity) {
