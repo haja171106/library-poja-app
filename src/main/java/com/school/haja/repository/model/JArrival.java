@@ -30,5 +30,4 @@ public class JArrival {
   @ManyToOne(optional = false)
   @JoinColumn(name = "library_id", nullable = false)
   private JLibrary library;
-
 }
