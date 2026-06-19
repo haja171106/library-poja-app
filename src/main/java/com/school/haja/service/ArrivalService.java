@@ -54,7 +54,10 @@ public class ArrivalService {
   }
 
   private JArrival toEntity(Arrival arrival) {
-    return new JArrival(arrival.getId(), arrival.getNbr_book());
+    JArrival entity = new JArrival();
+    entity.setId(arrival.getId());
+    entity.setNbr_book(arrival.getNbr_book());
+    return entity;
   }
 
   private Arrival toDomain(JArrival entity) {
