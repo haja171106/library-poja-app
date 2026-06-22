@@ -57,17 +57,9 @@ public class ArrivalService {
   }
 
   private JArrival toEntity(Arrival arrival) {
-    JLibrary library =
-        libraryRepository
-            .findById(arrival.getLibraryId())
-            .orElseThrow(
-                () -> new EntityNotFoundException("Library not found: " + arrival.getLibraryId()));
-
     JArrival entity = new JArrival();
     entity.setId(arrival.getId());
     entity.setNbr_book(arrival.getNbr_book());
-    entity.setFormat(arrival.getFormat()); // ← ajout
-    entity.setLibrary(library); // ← ajout
     return entity;
   }
 
