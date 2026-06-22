@@ -4,7 +4,6 @@ import com.school.haja.entities.Arrival;
 import com.school.haja.repository.ArrivalRepository;
 import com.school.haja.repository.LibraryRepository;
 import com.school.haja.repository.model.JArrival;
-import com.school.haja.repository.model.JLibrary;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.UUID;
