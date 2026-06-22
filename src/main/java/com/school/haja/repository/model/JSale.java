@@ -1,5 +1,6 @@
 package com.school.haja.repository.model;
 
+import com.school.haja.entities.BookFormat;
 import com.school.haja.entities.SaleStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class JSale {
+
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "id")
@@ -34,8 +36,12 @@ public class JSale {
   private int nbr_sale;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "status")
+  @Column(name = "status", nullable = false)
   private SaleStatus status;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "format", nullable = false)
+  private BookFormat format;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "library_id", nullable = false)
