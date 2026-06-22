@@ -15,4 +15,6 @@ public class Sale {
   private Double price;
   private int nbr_sale;
   private SaleStatus status;
+  private BookFormat format;
+  private UUID libraryId;
 }

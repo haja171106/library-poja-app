@@ -26,8 +26,9 @@ repositories {
 
 java {
     group = 'com.school.haja'
-    sourceCompatibility = '21'
-    targetCompatibility = '21'
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 configurations {
