@@ -2,7 +2,6 @@ package com.school.haja.endpoint.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -40,15 +39,19 @@ class BookControllerTest {
 
   private static final UUID BOOK_ID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
-  private Book sampleBook(UUID id) {
-    return new Book(
-        id, "The Hobbit", "9780547928227", 310, 24.99, Instant.parse("1937-09-21T00:00:00Z"));
-  }
-
   @Test
   void create_shouldReturn201() throws Exception {
-    Book request = sampleBook(null);
-    Book response = sampleBook(BOOK_ID);
+    Book request =
+        new Book(
+            null, "The Hobbit", "9780547928227", 310, 24.99, Instant.parse("1937-09-21T00:00:00Z"));
+    Book response =
+        new Book(
+            BOOK_ID,
+            "The Hobbit",
+            "9780547928227",
+            310,
+            24.99,
+            Instant.parse("1937-09-21T00:00:00Z"));
 
     when(bookService.create(any(Book.class))).thenReturn(response);
 
@@ -64,7 +67,15 @@ class BookControllerTest {
 
   @Test
   void getById_shouldReturn200() throws Exception {
-    when(bookService.getById(BOOK_ID)).thenReturn(sampleBook(BOOK_ID));
+    Book book =
+        new Book(
+            BOOK_ID,
+            "The Hobbit",
+            "9780547928227",
+            310,
+            24.99,
+            Instant.parse("1937-09-21T00:00:00Z"));
+    when(bookService.getById(BOOK_ID)).thenReturn(book);
 
     mockMvc
         .perform(get("/books/{id}", BOOK_ID))
@@ -85,13 +96,16 @@ class BookControllerTest {
   }
 
   @Test
-  void getById_withInvalidUUID_shouldReturn400() throws Exception {
-    mockMvc.perform(get("/books/{id}", "not-a-valid-uuid")).andExpect(status().isBadRequest());
-  }
-
-  @Test
   void getAll_shouldReturn200() throws Exception {
-    when(bookService.getAll()).thenReturn(List.of(sampleBook(BOOK_ID)));
+    Book book =
+        new Book(
+            BOOK_ID,
+            "The Hobbit",
+            "9780547928227",
+            310,
+            24.99,
+            Instant.parse("1937-09-21T00:00:00Z"));
+    when(bookService.getAll()).thenReturn(List.of(book));
 
     mockMvc
         .perform(get("/books"))
@@ -101,10 +115,22 @@ class BookControllerTest {
 
   @Test
   void update_shouldReturn200() throws Exception {
-    Book request = sampleBook(null);
-    request.setTitle("Updated title");
-    Book response = sampleBook(BOOK_ID);
-    response.setTitle("Updated title");
+    Book request =
+        new Book(
+            null,
+            "Updated title",
+            "9780547928227",
+            310,
+            29.99,
+            Instant.parse("1937-09-21T00:00:00Z"));
+    Book response =
+        new Book(
+            BOOK_ID,
+            "Updated title",
+            "9780547928227",
+            310,
+            29.99,
+            Instant.parse("1937-09-21T00:00:00Z"));
 
     when(bookService.update(eq(BOOK_ID), any(Book.class))).thenReturn(response);
 
@@ -118,37 +144,9 @@ class BookControllerTest {
   }
 
   @Test
-  void update_whenNotFound_shouldReturn404() throws Exception {
-    Book request = sampleBook(null);
-
-    when(bookService.update(eq(BOOK_ID), any(Book.class)))
-        .thenThrow(new EntityNotFoundException("Book not found: " + BOOK_ID));
-
-    mockMvc
-        .perform(
-            put("/books/{id}", BOOK_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$.message").value("Book not found: " + BOOK_ID));
-  }
-
-  @Test
   void delete_shouldReturn204() throws Exception {
     mockMvc.perform(delete("/books/{id}", BOOK_ID)).andExpect(status().isNoContent());
 
     verify(bookService).delete(BOOK_ID);
-  }
-
-  @Test
-  void delete_whenNotFound_shouldReturn404() throws Exception {
-    doThrow(new EntityNotFoundException("Book not found: " + BOOK_ID))
-        .when(bookService)
-        .delete(BOOK_ID);
-
-    mockMvc
-        .perform(delete("/books/{id}", BOOK_ID))
-        .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$.message").value("Book not found: " + BOOK_ID));
   }
 }

@@ -1,4 +1,4 @@
-package com.school.haja.endpoint.controller;
+package com.school.haja.controller;
 
 import com.school.haja.dto.StockResponse;
 import com.school.haja.entities.BookFormat;
