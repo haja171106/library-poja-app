@@ -4,6 +4,7 @@ import com.school.haja.entities.Arrival;
 import com.school.haja.repository.ArrivalRepository;
 import com.school.haja.repository.LibraryRepository;
 import com.school.haja.repository.model.JArrival;
+import com.school.haja.repository.model.JLibrary;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.UUID;
@@ -43,7 +44,7 @@ public class ArrivalService {
             .orElseThrow(() -> new EntityNotFoundException("Arrival not found: " + id));
 
     existing.setNbr_book(arrival.getNbr_book());
-    existing.setFormat(arrival.getFormat()); // ← ajout
+    existing.setFormat(arrival.getFormat());
 
     return toDomain(arrivalRepository.save(existing));
   }
@@ -56,18 +57,22 @@ public class ArrivalService {
   }
 
   private JArrival toEntity(Arrival arrival) {
+    JLibrary library =
+        libraryRepository
+            .findById(arrival.getLibraryId())
+            .orElseThrow(
+                () -> new EntityNotFoundException("Library not found: " + arrival.getLibraryId()));
+
     JArrival entity = new JArrival();
     entity.setId(arrival.getId());
     entity.setNbr_book(arrival.getNbr_book());
+    entity.setFormat(arrival.getFormat());
+    entity.setLibrary(library);
     return entity;
   }
 
   private Arrival toDomain(JArrival entity) {
     return new Arrival(
-        entity.getId(),
-        entity.getNbr_book(),
-        entity.getFormat(), // ← ajout
-        entity.getLibrary().getId() // ← ajout
-        );
+        entity.getId(), entity.getNbr_book(), entity.getFormat(), entity.getLibrary().getId());
   }
 }
