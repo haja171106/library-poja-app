@@ -61,9 +61,7 @@ public class ArrivalService {
         libraryRepository
             .findById(arrival.getLibraryId())
             .orElseThrow(
-                () ->
-                    new EntityNotFoundException(
-                        "Library not found: " + arrival.getLibraryId()));
+                () -> new EntityNotFoundException("Library not found: " + arrival.getLibraryId()));
 
     JArrival entity = new JArrival();
     entity.setId(arrival.getId());
@@ -75,9 +73,6 @@ public class ArrivalService {
 
   private Arrival toDomain(JArrival entity) {
     return new Arrival(
-        entity.getId(),
-        entity.getNbr_book(),
-        entity.getFormat(),
-        entity.getLibrary().getId());
+        entity.getId(), entity.getNbr_book(), entity.getFormat(), entity.getLibrary().getId());
   }
 }

@@ -27,8 +27,7 @@ class StockControllerTest {
 
   @MockBean private StockService stockService;
 
-  private static final UUID LIBRARY_ID =
-      UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
+  private static final UUID LIBRARY_ID = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
 
   @Test
   void getStockByFormat_shouldReturn200() throws Exception {
@@ -36,8 +35,7 @@ class StockControllerTest {
     when(stockService.getStock(LIBRARY_ID, BookFormat.PAPERBACK)).thenReturn(response);
 
     mockMvc
-        .perform(
-            get("/api/libraries/{libraryId}/stocks", LIBRARY_ID).param("format", "PAPERBACK"))
+        .perform(get("/api/libraries/{libraryId}/stocks", LIBRARY_ID).param("format", "PAPERBACK"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.libraryId").value(LIBRARY_ID.toString()))
         .andExpect(jsonPath("$.format").value("PAPERBACK"))

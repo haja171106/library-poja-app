@@ -83,9 +83,8 @@ class StockServiceTest {
 
     when(arrivalRepository.sumByLibraryAndFormat(eq(libraryId), any(BookFormat.class)))
         .thenReturn(10L);
-    when(
-            saleRepository.sumByLibraryAndFormatAndStatuses(
-                eq(libraryId), any(BookFormat.class), eq(COUNTED_STATUSES)))
+    when(saleRepository.sumByLibraryAndFormatAndStatuses(
+            eq(libraryId), any(BookFormat.class), eq(COUNTED_STATUSES)))
         .thenReturn(3L);
 
     List<StockResponse> results = stockService.getAllStocks(libraryId);

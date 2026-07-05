@@ -32,14 +32,12 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(EntityNotFoundException.class)
   public ResponseEntity<Map<String, Object>> handleNotFound(
       EntityNotFoundException ex, WebRequest request) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-        .body(body(404, ex.getMessage(), request));
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body(404, ex.getMessage(), request));
   }
 
   /** URL tapée qui ne correspond à aucune route existante. */
   @ExceptionHandler({NoResourceFoundException.class, NoHandlerFoundException.class})
-  public ResponseEntity<Map<String, Object>> handleRouteNotFound(
-      Exception ex, WebRequest request) {
+  public ResponseEntity<Map<String, Object>> handleRouteNotFound(Exception ex, WebRequest request) {
     String path = request.getDescription(false).replace("uri=", "");
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(body(404, "Route inexistante : " + path, request));
