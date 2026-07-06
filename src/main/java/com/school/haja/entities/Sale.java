@@ -17,4 +17,5 @@ public class Sale {
   private SaleStatus status;
   private BookFormat format;
   private UUID libraryId;
+  private UUID bookEditionId;
 }
