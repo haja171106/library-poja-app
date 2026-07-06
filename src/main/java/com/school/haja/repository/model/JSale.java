@@ -48,6 +48,6 @@ public class JSale {
   private JLibrary library;
 
   @ManyToOne
-  @JoinColumn(name= "book_edition_id")
+  @JoinColumn(name = "book_edition_id")
   private JBookEdition bookEdition;
 }
