@@ -16,10 +16,6 @@ public class SaleController {
 
   private final SaleService saleService;
 
-  @GetMapping("/libraries/{libraryId}/revenue-by-genre")
-  public List<GenreRevenueResponse> getRevenueByGenre(@PathVariable UUID libraryId) {
-    return saleService.getRevenueByGenre(libraryId);
-  }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)

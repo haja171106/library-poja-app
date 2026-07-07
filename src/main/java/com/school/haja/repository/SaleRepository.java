@@ -39,4 +39,19 @@ public interface SaleRepository extends JpaRepository<JSale, UUID> {
           + "GROUP BY g.id, g.type")
   List<GenreRevenue> sumRevenueByGenre(
       @Param("libraryId") UUID libraryId, @Param("status") SaleStatus status);
+
+  @Query(
+      "SELECT g.id AS genreId, g.type AS genreType, "
+          + "COALESCE(SUM(s.price * s.nbr_sale), 0) AS revenue "
+          + "FROM JSale s "
+          + "JOIN s.bookEdition be "
+          + "JOIN be.book b "
+          + "JOIN b.genres g "
+          + "WHERE s.library.id = :libraryId AND s.status = :status "
+          + "AND g.type IN :genres "
+          + "GROUP BY g.id, g.type")
+  List<GenreRevenue> sumRevenueByGenreAndGenresIn(
+      @Param("libraryId") UUID libraryId,
+      @Param("status") SaleStatus status,
+      @Param("genres") List<String> genres);
 }
