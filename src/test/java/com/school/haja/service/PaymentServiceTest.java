@@ -70,7 +70,9 @@ class PaymentServiceTest {
   void getAll_shouldReturnAllPayments() {
     when(paymentRepository.findAll())
         .thenReturn(
-            List.of(jPayment(UUID.randomUUID(), "CB", 10.0), jPayment(UUID.randomUUID(), "Cash", 20.0)));
+            List.of(
+                jPayment(UUID.randomUUID(), "CB", 10.0),
+                jPayment(UUID.randomUUID(), "Cash", 20.0)));
 
     List<Payment> result = paymentService.getAll();
 
@@ -114,8 +116,7 @@ class PaymentServiceTest {
     UUID id = UUID.randomUUID();
     when(paymentRepository.existsById(id)).thenReturn(false);
 
-    assertThatThrownBy(() -> paymentService.delete(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> paymentService.delete(id)).isInstanceOf(EntityNotFoundException.class);
 
     verify(paymentRepository, never()).deleteById(any());
   }

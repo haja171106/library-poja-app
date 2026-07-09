@@ -139,8 +139,7 @@ class ArrivalServiceTest {
     UUID id = UUID.randomUUID();
     when(arrivalRepository.existsById(id)).thenReturn(false);
 
-    assertThatThrownBy(() -> arrivalService.delete(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> arrivalService.delete(id)).isInstanceOf(EntityNotFoundException.class);
 
     verify(arrivalRepository, never()).deleteById(any());
   }

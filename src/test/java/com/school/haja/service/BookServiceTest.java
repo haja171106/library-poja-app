@@ -74,8 +74,7 @@ class BookServiceTest {
     UUID id = UUID.randomUUID();
     when(bookRepository.findById(id)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> bookService.getById(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> bookService.getById(id)).isInstanceOf(EntityNotFoundException.class);
   }
 
   @Test
@@ -115,8 +114,7 @@ class BookServiceTest {
     UUID id = UUID.randomUUID();
     when(bookRepository.findById(id)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(
-            () -> bookService.update(id, new Book(id, "X", "Y", 1, 1.0, Instant.now())))
+    assertThatThrownBy(() -> bookService.update(id, new Book(id, "X", "Y", 1, 1.0, Instant.now())))
         .isInstanceOf(EntityNotFoundException.class);
   }
 
@@ -135,8 +133,7 @@ class BookServiceTest {
     UUID id = UUID.randomUUID();
     when(bookRepository.existsById(id)).thenReturn(false);
 
-    assertThatThrownBy(() -> bookService.delete(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> bookService.delete(id)).isInstanceOf(EntityNotFoundException.class);
 
     verify(bookRepository, never()).deleteById(any());
   }

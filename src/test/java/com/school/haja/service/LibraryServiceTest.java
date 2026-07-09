@@ -111,8 +111,7 @@ class LibraryServiceTest {
     UUID id = UUID.randomUUID();
     when(libraryRepository.existsById(id)).thenReturn(false);
 
-    assertThatThrownBy(() -> libraryService.delete(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> libraryService.delete(id)).isInstanceOf(EntityNotFoundException.class);
 
     verify(libraryRepository, never()).deleteById(any());
   }

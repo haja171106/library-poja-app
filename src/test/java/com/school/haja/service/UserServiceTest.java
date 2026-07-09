@@ -28,7 +28,8 @@ class UserServiceTest {
 
   @InjectMocks private UserService userService;
 
-  private JUser jUser(UUID id, String first, String last, String email, Instant bday, String adress) {
+  private JUser jUser(
+      UUID id, String first, String last, String email, Instant bday, String adress) {
     return new JUser(id, first, last, email, bday, adress);
   }
 
@@ -67,8 +68,7 @@ class UserServiceTest {
     UUID id = UUID.randomUUID();
     when(userRepository.findById(id)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> userService.getById(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> userService.getById(id)).isInstanceOf(EntityNotFoundException.class);
   }
 
   @Test
@@ -128,8 +128,7 @@ class UserServiceTest {
     UUID id = UUID.randomUUID();
     when(userRepository.existsById(id)).thenReturn(false);
 
-    assertThatThrownBy(() -> userService.delete(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> userService.delete(id)).isInstanceOf(EntityNotFoundException.class);
 
     verify(userRepository, never()).deleteById(any());
   }

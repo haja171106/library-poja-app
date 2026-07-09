@@ -153,7 +153,8 @@ class SaleServiceTest {
   @Test
   void create_whenLibraryMissing_shouldThrow() {
     UUID libraryId = UUID.randomUUID();
-    Sale sale = new Sale(UUID.randomUUID(), 1.0, 1, SaleStatus.DONE, BookFormat.PAPERBACK, libraryId, null);
+    Sale sale =
+        new Sale(UUID.randomUUID(), 1.0, 1, SaleStatus.DONE, BookFormat.PAPERBACK, libraryId, null);
 
     when(libraryRepository.findById(libraryId)).thenReturn(Optional.empty());
 
@@ -167,7 +168,14 @@ class SaleServiceTest {
     UUID libraryId = UUID.randomUUID();
     UUID bookEditionId = UUID.randomUUID();
     Sale sale =
-        new Sale(UUID.randomUUID(), 1.0, 1, SaleStatus.DONE, BookFormat.PAPERBACK, libraryId, bookEditionId);
+        new Sale(
+            UUID.randomUUID(),
+            1.0,
+            1,
+            SaleStatus.DONE,
+            BookFormat.PAPERBACK,
+            libraryId,
+            bookEditionId);
 
     when(libraryRepository.findById(libraryId)).thenReturn(Optional.of(jLibrary(libraryId)));
     when(bookEditionRepository.findById(bookEditionId)).thenReturn(Optional.empty());
@@ -207,7 +215,12 @@ class SaleServiceTest {
             List.of(
                 jSale(UUID.randomUUID(), 1.0, 1, SaleStatus.DONE, BookFormat.PAPERBACK, libraryId),
                 jSale(
-                    UUID.randomUUID(), 2.0, 2, SaleStatus.BOOKED, BookFormat.HARDCOVER, libraryId)));
+                    UUID.randomUUID(),
+                    2.0,
+                    2,
+                    SaleStatus.BOOKED,
+                    BookFormat.HARDCOVER,
+                    libraryId)));
 
     List<Sale> result = saleService.getAll();
 
@@ -242,7 +255,13 @@ class SaleServiceTest {
                 saleService.update(
                     id,
                     new Sale(
-                        id, 1.0, 1, SaleStatus.DONE, BookFormat.PAPERBACK, UUID.randomUUID(), null)))
+                        id,
+                        1.0,
+                        1,
+                        SaleStatus.DONE,
+                        BookFormat.PAPERBACK,
+                        UUID.randomUUID(),
+                        null)))
         .isInstanceOf(EntityNotFoundException.class);
   }
 

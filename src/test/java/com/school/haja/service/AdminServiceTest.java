@@ -28,7 +28,8 @@ class AdminServiceTest {
 
   @InjectMocks private AdminService adminService;
 
-  private Admin admin(UUID id, String first, String last, String email, Instant bday, String adress) {
+  private Admin admin(
+      UUID id, String first, String last, String email, Instant bday, String adress) {
     Admin admin = new Admin();
     admin.setId(id);
     admin.setFirstname(first);
@@ -39,7 +40,8 @@ class AdminServiceTest {
     return admin;
   }
 
-  private JAdmin jAdmin(UUID id, String first, String last, String email, Instant bday, String adress) {
+  private JAdmin jAdmin(
+      UUID id, String first, String last, String email, Instant bday, String adress) {
     JAdmin admin = new JAdmin();
     admin.setId(id);
     admin.setFirstname(first);
@@ -83,8 +85,7 @@ class AdminServiceTest {
     UUID id = UUID.randomUUID();
     when(adminRepository.findById(id)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> adminService.getById(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> adminService.getById(id)).isInstanceOf(EntityNotFoundException.class);
   }
 
   @Test
@@ -144,8 +145,7 @@ class AdminServiceTest {
     UUID id = UUID.randomUUID();
     when(adminRepository.existsById(id)).thenReturn(false);
 
-    assertThatThrownBy(() -> adminService.delete(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> adminService.delete(id)).isInstanceOf(EntityNotFoundException.class);
 
     verify(adminRepository, never()).deleteById(any());
   }

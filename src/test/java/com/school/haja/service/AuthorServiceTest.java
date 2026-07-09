@@ -62,8 +62,7 @@ class AuthorServiceTest {
     UUID id = UUID.randomUUID();
     when(authorRepository.findById(id)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> authorService.getById(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> authorService.getById(id)).isInstanceOf(EntityNotFoundException.class);
   }
 
   @Test
@@ -119,8 +118,7 @@ class AuthorServiceTest {
     UUID id = UUID.randomUUID();
     when(authorRepository.existsById(id)).thenReturn(false);
 
-    assertThatThrownBy(() -> authorService.delete(id))
-        .isInstanceOf(EntityNotFoundException.class);
+    assertThatThrownBy(() -> authorService.delete(id)).isInstanceOf(EntityNotFoundException.class);
 
     verify(authorRepository, never()).deleteById(any());
   }

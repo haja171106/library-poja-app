@@ -37,7 +37,8 @@ class BookEditionServiceTest {
   @Test
   void create_shouldSaveAndReturnBookEdition() {
     UUID id = UUID.randomUUID();
-    when(bookEditionRepository.save(any(JBookEdition.class))).thenReturn(jBookEdition(id, "Grand Format"));
+    when(bookEditionRepository.save(any(JBookEdition.class)))
+        .thenReturn(jBookEdition(id, "Grand Format"));
 
     BookEdition result = bookEditionService.create(new BookEdition(id, "Grand Format"));
 
