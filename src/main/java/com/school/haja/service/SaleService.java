@@ -83,9 +83,10 @@ public class SaleService {
   }
 
   public List<GenreRevenueResponse> getRevenueByGenre(UUID libraryId, List<String> genres) {
-    var revenues = (genres == null || genres.isEmpty())
-        ? saleRepository.sumRevenueByGenre(libraryId, SaleStatus.DONE)
-        : saleRepository.sumRevenueByGenreAndGenresIn(libraryId, SaleStatus.DONE, genres);
+    var revenues =
+        (genres == null || genres.isEmpty())
+            ? saleRepository.sumRevenueByGenre(libraryId, SaleStatus.DONE)
+            : saleRepository.sumRevenueByGenreAndGenresIn(libraryId, SaleStatus.DONE, genres);
     return revenues.stream()
         .map(r -> new GenreRevenueResponse(r.getGenreId(), r.getGenreType(), r.getRevenue()))
         .collect(Collectors.toList());
