@@ -33,9 +33,9 @@ public class SaleService {
 
   public Sale getById(UUID id) {
     return saleRepository
-            .findById(id)
-            .map(this::toDomain)
-            .orElseThrow(() -> new EntityNotFoundException("Sale not found: " + id));
+        .findById(id)
+        .map(this::toDomain)
+        .orElseThrow(() -> new EntityNotFoundException("Sale not found: " + id));
   }
 
   public List<Sale> getAll() {
@@ -44,9 +44,9 @@ public class SaleService {
 
   public Sale update(UUID id, Sale sale) {
     JSale existing =
-            saleRepository
-                    .findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Sale not found: " + id));
+        saleRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Sale not found: " + id));
 
     existing.setPrice(sale.getPrice());
     existing.setNbr_sale(sale.getNbr_sale());
@@ -66,10 +66,10 @@ public class SaleService {
 
   private JSale toEntity(Sale sale) {
     JLibrary library =
-            libraryRepository
-                    .findById(sale.getLibraryId())
-                    .orElseThrow(
-                            () -> new EntityNotFoundException("Library not found: " + sale.getLibraryId()));
+        libraryRepository
+            .findById(sale.getLibraryId())
+            .orElseThrow(
+                () -> new EntityNotFoundException("Library not found: " + sale.getLibraryId()));
 
     JSale entity = new JSale();
     entity.setId(sale.getId());
@@ -84,8 +84,8 @@ public class SaleService {
 
   public List<GenreRevenueResponse> getRevenueByGenre(UUID libraryId) {
     return saleRepository.sumRevenueByGenre(libraryId, SaleStatus.DONE).stream()
-            .map(r -> new GenreRevenueResponse(r.getGenreId(), r.getGenreType(), r.getRevenue()))
-            .collect(Collectors.toList());
+        .map(r -> new GenreRevenueResponse(r.getGenreId(), r.getGenreType(), r.getRevenue()))
+        .collect(Collectors.toList());
   }
 
   private JBookEdition resolveBookEdition(UUID bookEditionId) {
@@ -93,18 +93,18 @@ public class SaleService {
       return null;
     }
     return bookEditionRepository
-            .findById(bookEditionId)
-            .orElseThrow(() -> new EntityNotFoundException("BookEdition not found: " + bookEditionId));
+        .findById(bookEditionId)
+        .orElseThrow(() -> new EntityNotFoundException("BookEdition not found: " + bookEditionId));
   }
 
   private Sale toDomain(JSale entity) {
     return new Sale(
-            entity.getId(),
-            entity.getPrice(),
-            entity.getNbr_sale(),
-            entity.getStatus(),
-            entity.getFormat(),
-            entity.getLibrary().getId(),
-            entity.getBookEditionId());
+        entity.getId(),
+        entity.getPrice(),
+        entity.getNbr_sale(),
+        entity.getStatus(),
+        entity.getFormat(),
+        entity.getLibrary().getId(),
+        entity.getBookEditionId());
   }
 }
