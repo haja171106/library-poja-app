@@ -43,7 +43,7 @@ public class ArrivalService {
             .orElseThrow(() -> new EntityNotFoundException("Arrival not found: " + id));
 
     existing.setNbr_book(arrival.getNbr_book());
-    existing.setFormat(arrival.getFormat()); // ← ajout
+    existing.setFormat(arrival.getFormat());
 
     return toDomain(arrivalRepository.save(existing));
   }
@@ -64,10 +64,6 @@ public class ArrivalService {
 
   private Arrival toDomain(JArrival entity) {
     return new Arrival(
-        entity.getId(),
-        entity.getNbr_book(),
-        entity.getFormat(), // ← ajout
-        entity.getLibrary().getId() // ← ajout
-        );
+        entity.getId(), entity.getNbr_book(), entity.getFormat(), entity.getLibrary().getId());
   }
 }

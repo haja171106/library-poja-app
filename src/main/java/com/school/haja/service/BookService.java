@@ -11,10 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Couche service pour l'entité {@link Book}. Contient la logique métier et fait le pont entre les
- * contrôleurs et le {@link BookRepository} (couche persistance).
- */
 @Service
 @AllArgsConstructor
 @Transactional
