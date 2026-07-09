@@ -1,5 +1,6 @@
 package com.school.haja.service;
 
+import com.school.haja.dto.GenreRevenue;
 import com.school.haja.dto.GenreRevenueResponse;
 import com.school.haja.entities.Sale;
 import com.school.haja.entities.SaleStatus;
@@ -82,8 +83,13 @@ public class SaleService {
     return entity;
   }
 
-  public List<GenreRevenueResponse> getRevenueByGenre(UUID libraryId) {
-    return saleRepository.sumRevenueByGenre(libraryId, SaleStatus.DONE).stream()
+  public List<GenreRevenueResponse> getRevenueByGenre(UUID libraryId, List<String> genres) {
+    List<GenreRevenue> results =
+        (genres == null || genres.isEmpty())
+            ? saleRepository.sumRevenueByGenre(libraryId, SaleStatus.DONE)
+            : saleRepository.sumRevenueByGenreAndGenresIn(libraryId, SaleStatus.DONE, genres);
+
+    return results.stream()
         .map(r -> new GenreRevenueResponse(r.getGenreId(), r.getGenreType(), r.getRevenue()))
         .collect(Collectors.toList());
   }
