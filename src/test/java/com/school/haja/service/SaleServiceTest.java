@@ -56,7 +56,7 @@ class SaleServiceTest {
                 new GenreRevenueFake(romanceId, "Romance", 150.0),
                 new GenreRevenueFake(sciFiId, "Science-Fiction", 90.0)));
 
-    List<GenreRevenueResponse> result = saleService.getRevenueByGenre(libraryId);
+    List<GenreRevenueResponse> result = saleService.getRevenueByGenre(libraryId, null);
 
     assertThat(result)
         .containsExactly(
@@ -70,7 +70,7 @@ class SaleServiceTest {
 
     when(saleRepository.sumRevenueByGenre(libraryId, SaleStatus.DONE)).thenReturn(List.of());
 
-    List<GenreRevenueResponse> result = saleService.getRevenueByGenre(libraryId);
+    List<GenreRevenueResponse> result = saleService.getRevenueByGenre(libraryId, null);
 
     assertThat(result).isEmpty();
   }

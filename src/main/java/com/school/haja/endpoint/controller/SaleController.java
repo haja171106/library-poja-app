@@ -1,6 +1,5 @@
 package com.school.haja.endpoint.controller;
 
-import com.school.haja.dto.GenreRevenueResponse;
 import com.school.haja.entities.Sale;
 import com.school.haja.service.SaleService;
 import java.util.List;
@@ -15,11 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class SaleController {
 
   private final SaleService saleService;
-
-  @GetMapping("/libraries/{libraryId}/revenue-by-genre")
-  public List<GenreRevenueResponse> getRevenueByGenre(@PathVariable UUID libraryId) {
-    return saleService.getRevenueByGenre(libraryId);
-  }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
