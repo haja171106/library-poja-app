@@ -24,6 +24,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class JBook {
+
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "id")
@@ -36,28 +37,28 @@ public class JBook {
   private String isbn;
 
   @Column(name = "nbr_page")
-  private int nbr_page;
+  private int nbrPage;
 
   @Column(name = "price")
   private double price;
 
   @Column(name = "release_date")
-  private Instant release_date;
+  private Instant releaseDate;
 
   @OneToMany(mappedBy = "book")
   private Set<JBookEdition> editions = new HashSet<>();
 
   @ManyToMany
   @JoinTable(
-      name = "book_genres",
-      joinColumns = @JoinColumn(name = "book_id"),
-      inverseJoinColumns = @JoinColumn(name = "genre_id"))
+          name = "book_genres",
+          joinColumns = @JoinColumn(name = "book_id"),
+          inverseJoinColumns = @JoinColumn(name = "genre_id"))
   private Set<JGenre> genres = new HashSet<>();
 
   @ManyToMany
   @JoinTable(
-      name = "book_authors",
-      joinColumns = @JoinColumn(name = "book_id"),
-      inverseJoinColumns = @JoinColumn(name = "author_id"))
+          name = "book_authors",
+          joinColumns = @JoinColumn(name = "book_id"),
+          inverseJoinColumns = @JoinColumn(name = "author_id"))
   private Set<JAuthor> authors = new HashSet<>();
 }
