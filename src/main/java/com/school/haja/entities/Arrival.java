@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Arrival {
   private UUID id;
-
   private int nbr_book;
+  private BookFormat format;
+  private UUID libraryId;
 }

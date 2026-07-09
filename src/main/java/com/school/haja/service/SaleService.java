@@ -1,7 +1,13 @@
 package com.school.haja.service;
 
+import com.school.haja.dto.GenreRevenueResponse;
 import com.school.haja.entities.Sale;
+import com.school.haja.entities.SaleStatus;
+import com.school.haja.repository.BookEditionRepository;
+import com.school.haja.repository.LibraryRepository;
 import com.school.haja.repository.SaleRepository;
+import com.school.haja.repository.model.JBookEdition;
+import com.school.haja.repository.model.JLibrary;
 import com.school.haja.repository.model.JSale;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -11,13 +17,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Couche service pour l'entité {@link Sale}. */
 @Service
 @AllArgsConstructor
 @Transactional
 public class SaleService {
 
   private final SaleRepository saleRepository;
+  private final LibraryRepository libraryRepository;
+  private final BookEditionRepository bookEditionRepository;
 
   public Sale create(Sale sale) {
     JSale saved = saleRepository.save(toEntity(sale));
@@ -44,6 +51,8 @@ public class SaleService {
     existing.setPrice(sale.getPrice());
     existing.setNbr_sale(sale.getNbr_sale());
     existing.setStatus(sale.getStatus());
+    existing.setFormat(sale.getFormat()); // ← nouveau
+    existing.setBookEdition(resolveBookEdition(sale.getBookEditionId()));
 
     return toDomain(saleRepository.save(existing));
   }
@@ -56,15 +65,50 @@ public class SaleService {
   }
 
   private JSale toEntity(Sale sale) {
+    JLibrary library =
+        libraryRepository
+            .findById(sale.getLibraryId())
+            .orElseThrow(
+                () -> new EntityNotFoundException("Library not found: " + sale.getLibraryId()));
+
     JSale entity = new JSale();
     entity.setId(sale.getId());
     entity.setPrice(sale.getPrice());
     entity.setNbr_sale(sale.getNbr_sale());
     entity.setStatus(sale.getStatus());
+    entity.setFormat(sale.getFormat());
+    entity.setLibrary(library);
+    entity.setBookEdition(resolveBookEdition(sale.getBookEditionId()));
     return entity;
   }
 
+  public List<GenreRevenueResponse> getRevenueByGenre(UUID libraryId, List<String> genres) {
+    var revenues =
+        (genres == null || genres.isEmpty())
+            ? saleRepository.sumRevenueByGenre(libraryId, SaleStatus.DONE)
+            : saleRepository.sumRevenueByGenreAndGenresIn(libraryId, SaleStatus.DONE, genres);
+    return revenues.stream()
+        .map(r -> new GenreRevenueResponse(r.getGenreId(), r.getGenreType(), r.getRevenue()))
+        .collect(Collectors.toList());
+  }
+
+  private JBookEdition resolveBookEdition(UUID bookEditionId) {
+    if (bookEditionId == null) {
+      return null;
+    }
+    return bookEditionRepository
+        .findById(bookEditionId)
+        .orElseThrow(() -> new EntityNotFoundException("BookEdition not found: " + bookEditionId));
+  }
+
   private Sale toDomain(JSale entity) {
-    return new Sale(entity.getId(), entity.getPrice(), entity.getNbr_sale(), entity.getStatus());
+    return new Sale(
+        entity.getId(),
+        entity.getPrice(),
+        entity.getNbr_sale(),
+        entity.getStatus(),
+        entity.getFormat(),
+        entity.getLibrary().getId(),
+        entity.getBookEdition() != null ? entity.getBookEdition().getId() : null);
   }
 }
