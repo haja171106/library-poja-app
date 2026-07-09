@@ -50,4 +50,8 @@ public class JSale {
   @ManyToOne
   @JoinColumn(name = "book_edition_id")
   private JBookEdition bookEdition;
+
+  public UUID getBookEditionId() {
+    return bookEdition != null ? bookEdition.getId() : null;
+  }
 }

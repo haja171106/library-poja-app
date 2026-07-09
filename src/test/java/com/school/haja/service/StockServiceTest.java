@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
+import com.school.haja.dto.BookStockResponse;
+import com.school.haja.dto.EditionStockResponse;
 import com.school.haja.dto.StockResponse;
 import com.school.haja.entities.BookFormat;
 import com.school.haja.entities.SaleStatus;
@@ -92,5 +94,89 @@ class StockServiceTest {
     assertThat(results).hasSize(BookFormat.values().length);
     assertThat(results).allMatch(r -> r.libraryId().equals(libraryId));
     assertThat(results).allMatch(r -> r.stock() == 7);
+  }
+
+  @Test
+  void getStockByBook_withArrivalsAndSales_shouldReturnCorrectStock() {
+    UUID libraryId = UUID.randomUUID();
+    UUID bookId = UUID.randomUUID();
+
+    when(arrivalRepository.sumByLibraryAndBook(libraryId, bookId)).thenReturn(100L);
+    when(saleRepository.sumByLibraryAndBookAndStatuses(libraryId, bookId, COUNTED_STATUSES))
+        .thenReturn(40L);
+
+    BookStockResponse result = stockService.getStockByBook(libraryId, bookId);
+
+    assertThat(result.libraryId()).isEqualTo(libraryId);
+    assertThat(result.bookId()).isEqualTo(bookId);
+    assertThat(result.totalArrivals()).isEqualTo(100);
+    assertThat(result.totalSales()).isEqualTo(40);
+    assertThat(result.stock()).isEqualTo(60);
+  }
+
+  @Test
+  void getStockByBook_withNoArrivalsAndNoSales_shouldReturnZeroStock() {
+    UUID libraryId = UUID.randomUUID();
+    UUID bookId = UUID.randomUUID();
+
+    when(arrivalRepository.sumByLibraryAndBook(libraryId, bookId)).thenReturn(0L);
+    when(saleRepository.sumByLibraryAndBookAndStatuses(libraryId, bookId, COUNTED_STATUSES))
+        .thenReturn(0L);
+
+    BookStockResponse result = stockService.getStockByBook(libraryId, bookId);
+
+    assertThat(result.totalArrivals()).isZero();
+    assertThat(result.totalSales()).isZero();
+    assertThat(result.stock()).isZero();
+  }
+
+  @Test
+  void getStockByBook_withMoreSalesThanArrivals_shouldReturnNegativeStock() {
+    UUID libraryId = UUID.randomUUID();
+    UUID bookId = UUID.randomUUID();
+
+    when(arrivalRepository.sumByLibraryAndBook(libraryId, bookId)).thenReturn(10L);
+    when(saleRepository.sumByLibraryAndBookAndStatuses(libraryId, bookId, COUNTED_STATUSES))
+        .thenReturn(14L);
+
+    BookStockResponse result = stockService.getStockByBook(libraryId, bookId);
+
+    assertThat(result.stock()).isEqualTo(-4);
+  }
+
+  @Test
+  void getStockByEdition_withArrivalsAndSales_shouldReturnCorrectStock() {
+    UUID libraryId = UUID.randomUUID();
+    UUID bookEditionId = UUID.randomUUID();
+
+    when(arrivalRepository.sumByLibraryAndBookEdition(libraryId, bookEditionId)).thenReturn(20L);
+    when(saleRepository.sumByLibraryAndBookEditionAndStatuses(
+            libraryId, bookEditionId, COUNTED_STATUSES))
+        .thenReturn(25L);
+
+    EditionStockResponse result = stockService.getStockByEdition(libraryId, bookEditionId);
+
+    assertThat(result.libraryId()).isEqualTo(libraryId);
+    assertThat(result.bookEditionId()).isEqualTo(bookEditionId);
+    assertThat(result.totalArrivals()).isEqualTo(20);
+    assertThat(result.totalSales()).isEqualTo(25);
+    assertThat(result.stock()).isEqualTo(-5);
+  }
+
+  @Test
+  void getStockByEdition_withNoArrivalsAndNoSales_shouldReturnZeroStock() {
+    UUID libraryId = UUID.randomUUID();
+    UUID bookEditionId = UUID.randomUUID();
+
+    when(arrivalRepository.sumByLibraryAndBookEdition(libraryId, bookEditionId)).thenReturn(0L);
+    when(saleRepository.sumByLibraryAndBookEditionAndStatuses(
+            libraryId, bookEditionId, COUNTED_STATUSES))
+        .thenReturn(0L);
+
+    EditionStockResponse result = stockService.getStockByEdition(libraryId, bookEditionId);
+
+    assertThat(result.totalArrivals()).isZero();
+    assertThat(result.totalSales()).isZero();
+    assertThat(result.stock()).isZero();
   }
 }

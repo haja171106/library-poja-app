@@ -20,4 +20,17 @@ public interface ArrivalRepository extends JpaRepository<JArrival, UUID> {
           + "WHERE a.library.id = :libraryId AND a.format = :format")
   Long sumByLibraryAndFormat(
       @Param("libraryId") UUID libraryId, @Param("format") BookFormat format);
+
+  @Query(
+      "SELECT COALESCE(SUM(a.nbr_book), 0) FROM JArrival a "
+          + "WHERE a.library.id = :libraryId AND a.bookEdition.id = :bookEditionId")
+  Long sumByLibraryAndBookEdition(
+      @Param("libraryId") UUID libraryId, @Param("bookEditionId") UUID bookEditionId);
+
+  @Query(
+      "SELECT COALESCE(SUM(a.nbr_book), 0) FROM JArrival a "
+          + "JOIN a.bookEdition be "
+          + "JOIN be.book b "
+          + "WHERE a.library.id = :libraryId AND b.id = :bookId")
+  Long sumByLibraryAndBook(@Param("libraryId") UUID libraryId, @Param("bookId") UUID bookId);
 }

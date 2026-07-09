@@ -38,4 +38,8 @@ public class JArrival {
   @ManyToOne(optional = false)
   @JoinColumn(name = "library_id", nullable = false)
   private JLibrary library;
+
+  @ManyToOne
+  @JoinColumn(name = "book_edition_id")
+  private JBookEdition bookEdition;
 }

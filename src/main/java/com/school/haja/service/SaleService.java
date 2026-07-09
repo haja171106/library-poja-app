@@ -1,5 +1,6 @@
 package com.school.haja.service;
 
+import com.school.haja.dto.GenreRevenue;
 import com.school.haja.dto.GenreRevenueResponse;
 import com.school.haja.entities.Sale;
 import com.school.haja.entities.SaleStatus;
@@ -51,7 +52,7 @@ public class SaleService {
     existing.setPrice(sale.getPrice());
     existing.setNbr_sale(sale.getNbr_sale());
     existing.setStatus(sale.getStatus());
-    existing.setFormat(sale.getFormat()); // ← nouveau
+    existing.setFormat(sale.getFormat());
     existing.setBookEdition(resolveBookEdition(sale.getBookEditionId()));
 
     return toDomain(saleRepository.save(existing));
@@ -83,11 +84,12 @@ public class SaleService {
   }
 
   public List<GenreRevenueResponse> getRevenueByGenre(UUID libraryId, List<String> genres) {
-    var revenues =
+    List<GenreRevenue> results =
         (genres == null || genres.isEmpty())
             ? saleRepository.sumRevenueByGenre(libraryId, SaleStatus.DONE)
             : saleRepository.sumRevenueByGenreAndGenresIn(libraryId, SaleStatus.DONE, genres);
-    return revenues.stream()
+
+    return results.stream()
         .map(r -> new GenreRevenueResponse(r.getGenreId(), r.getGenreType(), r.getRevenue()))
         .collect(Collectors.toList());
   }
@@ -109,6 +111,6 @@ public class SaleService {
         entity.getStatus(),
         entity.getFormat(),
         entity.getLibrary().getId(),
-        entity.getBookEdition() != null ? entity.getBookEdition().getId() : null);
+        entity.getBookEditionId());
   }
 }

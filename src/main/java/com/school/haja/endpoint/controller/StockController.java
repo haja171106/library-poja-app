@@ -1,5 +1,7 @@
 package com.school.haja.endpoint.controller;
 
+import com.school.haja.dto.BookStockResponse;
+import com.school.haja.dto.EditionStockResponse;
 import com.school.haja.dto.StockResponse;
 import com.school.haja.entities.BookFormat;
 import com.school.haja.service.StockService;
@@ -29,5 +31,17 @@ public class StockController {
   public ResponseEntity<StockResponse> getStockByFormat(
       @PathVariable UUID libraryId, @RequestParam BookFormat format) {
     return ResponseEntity.ok(stockService.getStock(libraryId, format));
+  }
+
+  @GetMapping("/books/{bookId}")
+  public ResponseEntity<BookStockResponse> getStockByBook(
+      @PathVariable UUID libraryId, @PathVariable UUID bookId) {
+    return ResponseEntity.ok(stockService.getStockByBook(libraryId, bookId));
+  }
+
+  @GetMapping("/editions/{bookEditionId}")
+  public ResponseEntity<EditionStockResponse> getStockByEdition(
+      @PathVariable UUID libraryId, @PathVariable UUID bookEditionId) {
+    return ResponseEntity.ok(stockService.getStockByEdition(libraryId, bookEditionId));
   }
 }

@@ -1,5 +1,7 @@
 package com.school.haja.service;
 
+import com.school.haja.dto.BookStockResponse;
+import com.school.haja.dto.EditionStockResponse;
 import com.school.haja.dto.StockResponse;
 import com.school.haja.entities.BookFormat;
 import com.school.haja.entities.SaleStatus;
@@ -33,5 +35,26 @@ public class StockService {
 
   public List<StockResponse> getAllStocks(UUID libraryId) {
     return Arrays.stream(BookFormat.values()).map(format -> getStock(libraryId, format)).toList();
+  }
+
+  public BookStockResponse getStockByBook(UUID libraryId, UUID bookId) {
+    int totalArrivals = arrivalRepository.sumByLibraryAndBook(libraryId, bookId).intValue();
+    int totalSales =
+        saleRepository
+            .sumByLibraryAndBookAndStatuses(libraryId, bookId, COUNTED_STATUSES)
+            .intValue();
+    int stock = totalArrivals - totalSales;
+    return new BookStockResponse(libraryId, bookId, totalArrivals, totalSales, stock);
+  }
+
+  public EditionStockResponse getStockByEdition(UUID libraryId, UUID bookEditionId) {
+    int totalArrivals =
+        arrivalRepository.sumByLibraryAndBookEdition(libraryId, bookEditionId).intValue();
+    int totalSales =
+        saleRepository
+            .sumByLibraryAndBookEditionAndStatuses(libraryId, bookEditionId, COUNTED_STATUSES)
+            .intValue();
+    int stock = totalArrivals - totalSales;
+    return new EditionStockResponse(libraryId, bookEditionId, totalArrivals, totalSales, stock);
   }
 }
